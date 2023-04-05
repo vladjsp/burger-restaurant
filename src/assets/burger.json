@@ -1,0 +1,82 @@
+[
+  {
+    "id": 0,
+    "imageUrl": "https://s7d1.scene7.com/is/image/mcdonalds/Sdwch_Hamburger:1-4-product-tile-desktop",
+    "title": "Гамбургер",
+    "types": [0, 1],
+    "sizes": [10, 12, 15],
+    "price": 125,
+    "category": 0,
+    "rating": 8
+  },
+  {
+    "id": 1,
+    "imageUrl": "https://s7d1.scene7.com/is/image/mcdonalds/Sdwch_Cheeseburger:1-4-product-tile-desktop",
+    "title": "Чизбургер",
+    "types": [0, 1],
+    "sizes": [10, 12, 15],
+    "price": 135,
+    "category": 0,
+    "rating": 7
+  },
+  {
+    "id": 2,
+    "imageUrl": "https://s7d1.scene7.com/is/image/mcdonalds/SdwchDoubleCheeseburger:1-4-product-tile-desktop",
+    "title": "Royal бургер",
+    "types": [1],
+    "sizes": [12, 15],
+    "price": 150,
+    "category": 1,
+    "rating": 5
+  },
+  {
+    "id": 3,
+    "imageUrl": "https://s7d1.scene7.com/is/image/mcdonalds/Sdwch_McChicken:1-4-product-tile-desktop",
+    "title": "Chicken бургер",
+    "types": [0],
+    "sizes": [10, 12, 15],
+    "price": 130,
+    "category": 4,
+    "rating": 9
+  },
+  {
+    "id": 4,
+    "imageUrl": "https://s7d1.scene7.com/is/image/mcdonalds/Sdwch_File-o-Fish-1:1-4-product-tile-desktop",
+    "title": "Tuna бургер",
+    "types": [0],
+    "sizes": [10, 15],
+    "price": 130,
+    "category": 2,
+    "rating": 3
+  },
+  {
+    "id": 5,
+    "imageUrl": "https://s7d1.scene7.com/is/image/mcdonalds/BIG_TASTY:1-4-product-tile-desktop",
+    "title": "Brooklyn бургер",
+    "types": [0, 1],
+    "sizes": [12, 15],
+    "price": 170,
+    "category": 2,
+    "rating": 6
+  },
+  {
+    "id": 6,
+    "imageUrl": "https://s7d1.scene7.com/is/image/mcdonalds/Toast_cheese:1-4-product-tile-desktop",
+    "title": "Бургер Італьяно",
+    "types": [0],
+    "sizes": [10, 12],
+    "price": 75,
+    "category": 3,
+    "rating": 5
+  },
+  {
+    "id": 7,
+    "imageUrl": "https://s7d1.scene7.com/is/image/mcdonalds/ROLL_FISH:1-4-product-tile-desktop",
+    "title": "Фіш рол",
+    "types": [0, 1],
+    "sizes": [10, 12, 15],
+    "price": 100,
+    "category": 5,
+    "rating": 7
+  }
+]
