@@ -7,7 +7,6 @@
 - SCSS
 - React Skeleton
 - React Pagination
-
 ```
 
 ### Description
