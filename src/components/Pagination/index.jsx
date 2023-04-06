@@ -1,10 +1,10 @@
 //import { useState } from "react";
 
-import ReactPaginate from "react-paginate";
+import ReactPaginate from 'react-paginate';
 
-import styles from "./Pagination.module.scss";
+import styles from './Pagination.module.scss';
 
-const Pagination = ({ onPageChange, pagesAmount }) => {
+const Pagination = ({ onPageChange, pagesAmount, value }) => {
   //const [itemOffset, setItemOffset] = useState(0);
 
   // const endOffset = itemOffset + itemsPerPage;
@@ -23,9 +23,9 @@ const Pagination = ({ onPageChange, pagesAmount }) => {
       className={styles.root}
       breakLabel='...'
       nextLabel=' >'
-      onPageChange={event => onPageChange(event.selected + 1)}
+      onPageChange={(event) => onPageChange(event.selected + 1)}
       pageRangeDisplayed={4}
-      pageCount={pagesAmount}
+      pageCount={3}
       previousLabel='< '
       renderOnZeroPageCount={null}
     />

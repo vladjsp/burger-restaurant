@@ -1,15 +1,12 @@
-import { useState, createContext } from "react";
-import { Routes, Route } from "react-router-dom";
-import { useSelector, useDispatch } from "react-redux";
+import { useState, createContext } from 'react';
+import { Routes, Route } from 'react-router-dom';
 
-import { decrement, increment } from "./redux/slices/filterSlice";
+import Header from './components/Header';
+import PageNotFound from './pages/404';
+import Home from './pages/Home';
+import Cart from './pages/Cart';
 
-import Header from "./components/Header";
-import PageNotFound from "./pages/404";
-import Home from "./pages/Home";
-import Cart from "./pages/Cart";
-
-import "./scss/app.scss";
+import './scss/app.scss';
 
 /* TODO
 1. Список опцій сортування замінити на: "популярністю", "спочатку дорогі", "спочатку дешеві", "за алфіавітом"
@@ -17,12 +14,10 @@ import "./scss/app.scss";
 3. Пошук зараз шукає тільки на поточній сторінці. Тобто при пошуку серед Всіх товарів він покаже тільки ті, які є на поточній сторінці. Виправити.
 */
 
-export const SearchContext = createContext("");
+export const SearchContext = createContext('');
 
 function App() {
-  const [searchValue, setSearchValue] = useState("");
-  const count = useSelector(state => state.counter.count);
-  const dispatch = useDispatch();
+  const [searchValue, setSearchValue] = useState('');
 
   return (
     <div className='wrapper'>

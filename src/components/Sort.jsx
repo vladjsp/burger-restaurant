@@ -1,16 +1,22 @@
-import { useState } from "react";
+import { useState } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 
-const Sort = ({ value, onSortSelection, onSortOrderSelection }) => {
+import { setSortOption } from '../redux/slices/filterSlice';
+
+const sortingOptions = [
+  { name: 'популярністю', sortProperty: 'rating' },
+  { name: 'ціною', sortProperty: 'price' },
+  { name: 'абеткою', sortProperty: 'title' },
+];
+
+const Sort = ({ onSortOrderSelection }) => {
+  const dispatch = useDispatch();
+  const sort = useSelector((state) => state.filter.sort);
+
   const [open, setOpen] = useState(false);
 
-  const sortingOptions = [
-    { name: "популярністю", sortProperty: "rating" },
-    { name: "ціною", sortProperty: "price" },
-    { name: "абеткою", sortProperty: "title" },
-  ];
-
-  const handleSortOptionClick = index => {
-    onSortSelection(index);
+  const handleSortOptionClick = (obj) => {
+    dispatch(setSortOption(obj));
     setOpen(false);
   };
 
@@ -29,7 +35,7 @@ const Sort = ({ value, onSortSelection, onSortOrderSelection }) => {
           />
         </svg>
         <b>Сортувати за:</b>
-        <span onClick={() => setOpen(!open)}>{value.name}</span>
+        <span onClick={() => setOpen(!open)}>{sort.name}</span>
       </div>
       {open && (
         <div className='sort__popup'>
@@ -38,7 +44,7 @@ const Sort = ({ value, onSortSelection, onSortOrderSelection }) => {
               <li
                 key={index}
                 onClick={() => handleSortOptionClick(obj)}
-                className={value.sortProperty === obj.sortProperty ? "active" : ""}>
+                className={sort.sortProperty === obj.sortProperty ? 'active' : ''}>
                 {obj.name}
               </li>
             ))}
@@ -46,8 +52,8 @@ const Sort = ({ value, onSortSelection, onSortOrderSelection }) => {
         </div>
       )}
       <div>
-        <button onClick={() => onSortOrderSelection("asc")}> ↑ </button>
-        <button onClick={() => onSortOrderSelection("desc")}> ↓ </button>
+        <button onClick={() => onSortOrderSelection('asc')}> ↑ </button>
+        <button onClick={() => onSortOrderSelection('desc')}> ↓ </button>
       </div>
     </div>
   );
