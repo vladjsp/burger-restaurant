@@ -1,7 +1,7 @@
-@import "./variables";
-@import "./libs/normalize";
+@import './variables';
+@import './libs/normalize';
 
-@import "./components/all";
+@import './components/all';
 
 body {
   background-color: $background;
@@ -162,12 +162,9 @@ body {
       justify-content: space-between;
       width: 13%;
 
-      &-minus {
-        svg {
-          path:first-of-type {
-            display: none;
-          }
-        }
+      &-action {
+        font-size: 1.25rem;
+        font-weight: 500;
       }
 
       b {

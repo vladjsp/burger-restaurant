@@ -1,9 +1,29 @@
-import { useState } from "react";
+import { useState } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 
-const BurgerCard = ({ title, price, sizes, types, imageUrl }) => {
+import { addItem } from '../redux/slices/cartSlice';
+
+const BurgerCard = ({ id, title, price, sizes, types, imageUrl }) => {
+  const dispatch = useDispatch();
+  const itemAmount = useSelector((state) => state.cart.items.find((obj) => obj.id === id));
   const [activeType, setActiveType] = useState(0);
   const [activeSize, setActiveSize] = useState(0);
-  const typesNames = ["звичайний", "подвійний"];
+  const typesNames = ['звичайний', 'подвійний'];
+
+  const addedAmount = itemAmount ? itemAmount.amount : 0;
+
+  const handleBurgerAdd = (obj) => {
+    const selectedBurger = {
+      id,
+      title,
+      price,
+      imageUrl,
+      type: typesNames[activeType],
+      size: activeSize,
+    };
+
+    dispatch(addItem(selectedBurger));
+  };
 
   return (
     <div className='burger-card'>
@@ -14,7 +34,7 @@ const BurgerCard = ({ title, price, sizes, types, imageUrl }) => {
           {types.map((type, index) => (
             <li
               key={index}
-              className={activeType === type ? "active" : ""}
+              className={activeType === type ? 'active' : ''}
               onClick={() => setActiveType(type)}>
               {typesNames[type]}
             </li>
@@ -24,7 +44,7 @@ const BurgerCard = ({ title, price, sizes, types, imageUrl }) => {
           {sizes.map((size, index) => (
             <li
               key={index}
-              className={activeSize === index ? "active" : ""}
+              className={activeSize === index ? 'active' : ''}
               onClick={() => setActiveSize(index)}>
               {size} см.
             </li>
@@ -33,7 +53,7 @@ const BurgerCard = ({ title, price, sizes, types, imageUrl }) => {
       </div>
       <div className='burger-card__bottom'>
         <div className='burger-card__price'>від {price} ₴</div>
-        <div className='button button--outline button--add'>
+        <button onClick={handleBurgerAdd} className='button button--outline button--add'>
           <svg
             width='12'
             height='12'
@@ -46,8 +66,8 @@ const BurgerCard = ({ title, price, sizes, types, imageUrl }) => {
             />
           </svg>
           <span> Додати</span>
-          <i>0</i>
-        </div>
+          {addedAmount > 0 && <i>{addedAmount}</i>}
+        </button>
       </div>
     </div>
   );

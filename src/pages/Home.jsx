@@ -1,9 +1,12 @@
 import { useState, useEffect, useContext } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import axios from 'axios';
+import qs from 'qs';
+import { useNavigate } from 'react-router-dom';
 
-import { setCategoryId, setCurrentPage } from '../redux/slices/filterSlice';
+import { setCategoryId, setCurrentPage, setFilters } from '../redux/slices/filterSlice';
 import { SearchContext } from '../App';
+import { sortingOptions } from '../components/Sort';
 
 import Categories from '../components/Categories';
 import Sort from '../components/Sort';
@@ -13,14 +16,14 @@ import Pagination from '../components/Pagination';
 
 const Home = () => {
   const dispatch = useDispatch();
-  const { categoryId, sort, currentPage } = useSelector((state) => state.filter); //в store є filter, який імпортований з filterSlice. У filterSlice всередині при створенні за допомогою createSlice є inintialState і от з нього ми і дістали цей categoryId
+  const { categoryId, sort, currentPage } = useSelector((state) => state.filter);
+  const navigate = useNavigate();
   const sortType = sort.sortProperty;
 
   const { searchValue } = useContext(SearchContext);
   const [isLoading, setIsLoading] = useState(true);
   const [burgersList, setBurgersList] = useState([]);
   const [sortOrder, setSortOrder] = useState('desc');
-  //const [currentPage, setCurrentPage] = useState(1);
 
   const limitPerPage = 4;
 
@@ -31,6 +34,14 @@ const Home = () => {
   const onChangePage = (number) => {
     dispatch(setCurrentPage(number));
   };
+
+  useEffect(() => {
+    if (window.location.search) {
+      const params = qs.parse(window.location.search.substring(1));
+      const sort = sortingOptions.find((obj) => obj.sortProperty === params.sortProperty);
+      dispatch(setFilters({ ...params, sort }));
+    }
+  }, []);
 
   useEffect(() => {
     setIsLoading(true);
@@ -65,6 +76,20 @@ const Home = () => {
       });
 
     window.scrollTo(0, 0);
+  }, [categoryId, sortType, sortOrder, currentPage]);
+
+  useEffect(() => {
+    const queryString = qs.stringify(
+      {
+        sortProperty: sortType,
+        categoryId: categoryId,
+        currentPage: currentPage,
+      },
+      { addQueryPrefix: true }
+    );
+    //console.log('queryString', queryString);
+
+    navigate(queryString);
   }, [categoryId, sortType, sortOrder, currentPage]);
 
   const burgersRedner = burgersList
