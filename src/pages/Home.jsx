@@ -1,10 +1,12 @@
 import { useState, useEffect, useContext } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import axios from 'axios';
+//import axios from 'axios';
 import qs from 'qs';
 import { useNavigate } from 'react-router-dom';
 
 import { setCategoryId, setCurrentPage, setFilters } from '../redux/slices/filterSlice';
+import { fetchBurgers } from '../redux/slices/burgersSlice';
+
 import { SearchContext } from '../App';
 import { sortingOptions } from '../components/Sort';
 
@@ -17,12 +19,11 @@ import Pagination from '../components/Pagination';
 const Home = () => {
   const dispatch = useDispatch();
   const { categoryId, sort, currentPage } = useSelector((state) => state.filter);
+  const { burgersList, requestStatus } = useSelector((state) => state.burgers);
   const navigate = useNavigate();
   const sortType = sort.sortProperty;
 
   const { searchValue } = useContext(SearchContext);
-  const [isLoading, setIsLoading] = useState(true);
-  const [burgersList, setBurgersList] = useState([]);
   const [sortOrder, setSortOrder] = useState('desc');
 
   const limitPerPage = 4;
@@ -43,12 +44,11 @@ const Home = () => {
     }
   }, []);
 
-  useEffect(() => {
-    setIsLoading(true);
+  const getBurgers = async () => {
+    //setIsLoading(true);
 
     const category = categoryId > 0 ? `category=${categoryId}` : '';
     const sortBy = sortType;
-    //const search = searchValue ? `search=${searchValue}` : ""; for backend search
 
     /* fetch(
     //   `https://642be6fad7081590f92ca383.mockapi.io/items?page=${currentPage}&limit=${limitPerPage}&${category}&sortBy=${sortBy}&order=${sortOrder}`
@@ -66,17 +66,25 @@ const Home = () => {
     //     alert('Сталася помилка при запиті до серверa.');
     //   });*/
 
-    axios
-      .get(
-        `https://642be6fad7081590f92ca383.mockapi.io/items?page=${currentPage}&limit=${limitPerPage}&${category}&sortBy=${sortBy}&order=${sortOrder}`
-      )
-      .then((response) => {
-        setBurgersList(response.data);
-        setIsLoading(false);
-      });
+    // await axios
+    //   .get(
+    //     `https://642be6fad7081590f92ca383.mockapi.io/items?page=${currentPage}&limit=${limitPerPage}&${category}&sortBy=${sortBy}&order=${sortOrder}`
+    //   )
+    //   .then((response) => {
+    //     setBurgersList(response.data);
+    //     setIsLoading(false);
+    //   }).catch(error => {
+    //   console.log(error);
+    // });
+
+    dispatch(fetchBurgers({ currentPage, limitPerPage, category, sortBy, sortOrder }));
 
     window.scrollTo(0, 0);
-  }, [categoryId, sortType, sortOrder, currentPage]);
+  };
+
+  useEffect(() => {
+    getBurgers();
+  }, [categoryId, sortType, searchValue, currentPage]);
 
   useEffect(() => {
     const queryString = qs.stringify(
@@ -104,7 +112,17 @@ const Home = () => {
         <Sort onSortOrderSelection={(value) => setSortOrder(value)} />
       </div>
       <h2 className='content__title'>Всі бургери</h2>
-      <div className='content__items'>{isLoading ? skeletonsRender : burgersRedner}</div>
+      {requestStatus === 'error' ? (
+        <div className='content__error-info'>
+          <h2>Не вдалося отримати список бургерів 😕</h2>
+          <p>Cталася помилка при запиті до сервера. Спробуйте повторити запит.</p>
+        </div>
+      ) : (
+        <div className='content__items'>
+          {requestStatus === 'loading' ? skeletonsRender : burgersRedner}
+        </div>
+      )}
+
       <Pagination value={currentPage} onPageChange={onChangePage} pagesAmount={3} />
     </div>
   );
