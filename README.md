@@ -16,4 +16,4 @@
 
 ### Preview
 
-<img src="/preview-shoes-shop.png" height="350" style="border-radius:10px;margin-bottom:1rem;" />
+<img src="/preview.png" height="350" style="border-radius:10px;margin-bottom:1rem;" />
