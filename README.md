@@ -1,19 +1,19 @@
 ### Tech stack:
 
 ```
-- ReactJS (Components, useState, useEffect, useContext)
+- ReactJS
+- Redux Toolkit
 - React Router
-- MockAPI
-- SCSS
+- API (mockapi)
+- SASS
 - React Skeleton
 - React Pagination
 ```
 
 ### Description
 
-<p>A single page application developed using reactjs. Pages: /home and /cart.</p>
-<p> Features: sorting, search, filtering, pagination, skeleton.</p>
+<p>A ReactJS web app that uses Redux Toolkit and SASS for styling. The app works with API using axios and fetch and includes features such as sorting, filtering, pagination, skeleton loading, and search functionality.</p>
 
 ### Preview
 
-soon
+<img src="/preview-shoes-shop.png" height="350" style="border-radius:10px;margin-bottom:1rem;" />
