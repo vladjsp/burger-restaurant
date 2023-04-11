@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
+import { Link } from 'react-router-dom';
 
 import { addItem } from '../redux/slices/cartSlice';
 
@@ -27,8 +28,10 @@ const BurgerCard = ({ id, title, price, sizes, types, imageUrl }) => {
 
   return (
     <div className='burger-card'>
-      <img className='burger-card__image' src={imageUrl} alt='burger' />
-      <h4 className='burger-card__title'>{title}</h4>
+      <Link to={`/burger/${id}`}>
+        <img className='burger-card__image' src={imageUrl} alt='burger' />
+        <h4 className='burger-card__title'>{title}</h4>
+      </Link>
       <div className='burger-card__selector'>
         <ul>
           {types.map((type, index) => (

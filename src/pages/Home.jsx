@@ -1,13 +1,11 @@
-import { useState, useEffect, useContext } from 'react';
+import { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-//import axios from 'axios';
 import qs from 'qs';
 import { useNavigate } from 'react-router-dom';
 
 import { setCategoryId, setCurrentPage, setFilters } from '../redux/slices/filterSlice';
 import { fetchBurgers } from '../redux/slices/burgersSlice';
 
-import { SearchContext } from '../App';
 import { sortingOptions } from '../components/Sort';
 
 import Categories from '../components/Categories';
@@ -18,12 +16,13 @@ import Pagination from '../components/Pagination';
 
 const Home = () => {
   const dispatch = useDispatch();
-  const { categoryId, sort, currentPage } = useSelector((state) => state.filter);
-  const { burgersList, requestStatus } = useSelector((state) => state.burgers);
   const navigate = useNavigate();
+
+  const { burgersList, requestStatus } = useSelector((state) => state.burgers);
+  const { categoryId, sort, currentPage, searchValue } = useSelector((state) => state.filter);
+
   const sortType = sort.sortProperty;
 
-  const { searchValue } = useContext(SearchContext);
   const [sortOrder, setSortOrder] = useState('desc');
 
   const limitPerPage = 4;
@@ -45,37 +44,8 @@ const Home = () => {
   }, []);
 
   const getBurgers = async () => {
-    //setIsLoading(true);
-
     const category = categoryId > 0 ? `category=${categoryId}` : '';
     const sortBy = sortType;
-
-    /* fetch(
-    //   `https://642be6fad7081590f92ca383.mockapi.io/items?page=${currentPage}&limit=${limitPerPage}&${category}&sortBy=${sortBy}&order=${sortOrder}`
-    // )
-    //   .then((res) => {
-    //     return res.json();
-    //   })
-    //   .then((data) => {
-    //     //console.log(data);
-    //     setBurgersList(data);
-    //     setIsLoading(false);
-    //   })
-    //   .catch((error) => {
-    //     console.error(error);
-    //     alert('Сталася помилка при запиті до серверa.');
-    //   });*/
-
-    // await axios
-    //   .get(
-    //     `https://642be6fad7081590f92ca383.mockapi.io/items?page=${currentPage}&limit=${limitPerPage}&${category}&sortBy=${sortBy}&order=${sortOrder}`
-    //   )
-    //   .then((response) => {
-    //     setBurgersList(response.data);
-    //     setIsLoading(false);
-    //   }).catch(error => {
-    //   console.log(error);
-    // });
 
     dispatch(fetchBurgers({ currentPage, limitPerPage, category, sortBy, sortOrder }));
 
@@ -95,7 +65,6 @@ const Home = () => {
       },
       { addQueryPrefix: true }
     );
-    //console.log('queryString', queryString);
 
     navigate(queryString);
   }, [categoryId, sortType, sortOrder, currentPage]);
