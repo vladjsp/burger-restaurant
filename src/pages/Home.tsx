@@ -1,10 +1,13 @@
 import { useState, useEffect } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 import qs from 'qs';
 import { useNavigate } from 'react-router-dom';
 
-import { setCategoryId, setCurrentPage, setFilters } from '../redux/slices/filterSlice';
-import { fetchBurgers } from '../redux/slices/burgersSlice';
+import { setCategoryId, setCurrentPage, setFilters } from '../redux/slices/filter/filterSlice';
+import { selectFilter } from '../redux/slices/filter/selectors';
+
+import { fetchBurgers, selectBurgerData } from '../redux/slices/burger/burgersSlice';
+import { TBurger } from '../redux/slices/burger/types';
 
 import { sortingOptions } from '../components/Sort';
 
@@ -13,13 +16,14 @@ import Sort from '../components/Sort';
 import Skeleton from '../components/Skeleton';
 import BurgerCard from '../components/BurgerCard';
 import Pagination from '../components/Pagination';
+import { useAppDispatch } from '../redux/store';
 
-const Home = () => {
-  const dispatch = useDispatch();
+const Home: React.FC = () => {
+  const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
-  const { burgersList, requestStatus } = useSelector((state) => state.burgers);
-  const { categoryId, sort, currentPage, searchValue } = useSelector((state) => state.filter);
+  const { burgersList, requestStatus } = useSelector(selectBurgerData);
+  const { categoryId, sort, currentPage, searchValue } = useSelector(selectFilter);
 
   const sortType = sort.sortProperty;
 
@@ -27,18 +31,19 @@ const Home = () => {
 
   const limitPerPage = 4;
 
-  const onCategorySelection = (id) => {
+  const onCategorySelection = (id: number) => {
     dispatch(setCategoryId(id));
   };
 
-  const onChangePage = (number) => {
-    dispatch(setCurrentPage(number));
+  const onChangePage = (pageNum: number) => {
+    dispatch(setCurrentPage(pageNum));
   };
 
   useEffect(() => {
     if (window.location.search) {
       const params = qs.parse(window.location.search.substring(1));
       const sort = sortingOptions.find((obj) => obj.sortProperty === params.sortProperty);
+      // @ts-ignore
       dispatch(setFilters({ ...params, sort }));
     }
   }, []);
@@ -46,7 +51,7 @@ const Home = () => {
   const getBurgers = async () => {
     const category = categoryId > 0 ? `category=${categoryId}` : '';
     const sortBy = sortType;
-
+    // @ts-ignore
     dispatch(fetchBurgers({ currentPage, limitPerPage, category, sortBy, sortOrder }));
 
     window.scrollTo(0, 0);
@@ -70,15 +75,15 @@ const Home = () => {
   }, [categoryId, sortType, sortOrder, currentPage]);
 
   const burgersRedner = burgersList
-    .filter((obj) => obj.title.toLowerCase().includes(searchValue.toLowerCase()))
-    .map((obj, index) => <BurgerCard key={obj.id} {...obj} />);
+    .filter((obj: TBurger) => obj.title.toLowerCase().includes(searchValue.toLowerCase()))
+    .map((obj: TBurger) => <BurgerCard key={obj.id} {...obj} />);
   const skeletonsRender = [...new Array(6)].map((_, index) => <Skeleton key={index} />);
 
   return (
     <div className='container'>
       <div className='content__top'>
         <Categories value={categoryId} onCategorySelection={onCategorySelection} />
-        <Sort onSortOrderSelection={(value) => setSortOrder(value)} />
+        <Sort onSortOrderSelection={(value: string) => setSortOrder(value)} />
       </div>
       <h2 className='content__title'>Всі бургери</h2>
       {requestStatus === 'error' ? (
@@ -92,7 +97,7 @@ const Home = () => {
         </div>
       )}
 
-      <Pagination value={currentPage} onPageChange={onChangePage} pagesAmount={3} />
+      <Pagination onPageChange={onChangePage} />
     </div>
   );
 };

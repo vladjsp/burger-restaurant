@@ -1,12 +1,14 @@
 import { Link } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 
-import { removeItem, clearItems, plusItem, minusItem } from '../redux/slices/cartSlice';
+import { removeItem, clearItems, plusItem, minusItem } from '../redux/slices/cart/cartSlice';
+import { TCartItem } from '../redux/slices/cart/types';
+import { selectCart } from '../redux/slices/cart/selectors';
 
 const Cart = () => {
   const dispatch = useDispatch();
-  const { items, totalPrice } = useSelector((state) => state.cart);
-  const totalAmount = items.reduce((sum, item) => item.amount + sum, 0);
+  const { items, totalPrice } = useSelector(selectCart);
+  const totalAmount = items.reduce((sum: number, item: TCartItem) => item.amount + sum, 0);
 
   return (
     <div className='container container--cart'>
@@ -84,7 +86,7 @@ const Cart = () => {
           </div>
         </div>
         <div className='content__items'>
-          {items.map((burger) => (
+          {items.map((burger: TCartItem) => (
             <div key={burger.id} className='cart__item'>
               <div className='cart__item-img'>
                 <img className='burger-block__image' src={burger.imageUrl} alt='burger' />

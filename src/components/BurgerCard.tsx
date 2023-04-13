@@ -2,25 +2,37 @@ import { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
 
-import { addItem } from '../redux/slices/cartSlice';
+import { addItem } from '../redux/slices/cart/cartSlice';
+import { TCartItem } from '../redux/slices/cart/types';
+import { selectCartItemById } from '../redux/slices/cart/selectors';
 
-const BurgerCard = ({ id, title, price, sizes, types, imageUrl }) => {
+type BurgerCardProps = {
+  id: number;
+  title: string;
+  price: number;
+  sizes: number[];
+  types: number[];
+  imageUrl: string;
+};
+
+const BurgerCard: React.FC<BurgerCardProps> = ({ id, title, price, sizes, types, imageUrl }) => {
   const dispatch = useDispatch();
-  const itemAmount = useSelector((state) => state.cart.items.find((obj) => obj.id === id));
+  const itemAmount = useSelector(selectCartItemById(String(id)));
   const [activeType, setActiveType] = useState(0);
   const [activeSize, setActiveSize] = useState(0);
   const typesNames = ['звичайний', 'подвійний'];
 
   const addedAmount = itemAmount ? itemAmount.amount : 0;
 
-  const handleBurgerAdd = (obj) => {
-    const selectedBurger = {
-      id,
+  const handleBurgerAdd = () => {
+    const selectedBurger: TCartItem = {
+      id: String(id),
       title,
       price,
       imageUrl,
       type: typesNames[activeType],
       size: activeSize,
+      amount: 0,
     };
 
     dispatch(addItem(selectedBurger));

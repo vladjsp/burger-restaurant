@@ -1,6 +1,6 @@
-import ContentLoader from "react-content-loader";
+import ContentLoader from 'react-content-loader';
 
-const Skeleton = props => (
+const Skeleton = (props: any) => (
   <ContentLoader
     className='burger-block'
     speed={2}

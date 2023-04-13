@@ -1,29 +1,40 @@
-import { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 
-import { setSortOption } from '../redux/slices/filterSlice';
+import { setSortOption } from '../redux/slices/filter/filterSlice';
+import { selectSort } from '../redux/slices/filter/selectors';
 
-export const sortingOptions = [
+type SortOption = {
+  name: string;
+  sortProperty: string;
+};
+
+type SortProps = {
+  onSortOrderSelection: any;
+};
+
+export const sortingOptions: SortOption[] = [
   { name: 'популярністю', sortProperty: 'rating' },
   { name: 'ціною', sortProperty: 'price' },
   { name: 'абеткою', sortProperty: 'title' },
 ];
 
-const Sort = ({ onSortOrderSelection }) => {
+const Sort = ({ onSortOrderSelection }: SortProps) => {
   const dispatch = useDispatch();
-  const sort = useSelector((state) => state.filter.sort);
-  const sortRef = useRef();
+  const sort = useSelector(selectSort);
+  const sortRef = useRef<HTMLDivElement>(null);
 
   const [open, setOpen] = useState(false);
 
-  const handleSortOptionClick = (obj) => {
+  const handleSortOptionClick = (obj: SortOption) => {
+    // @ts-ignore
     dispatch(setSortOption(obj));
     setOpen(false);
   };
 
   useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (!event.composedPath().includes(sortRef.current)) {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (sortRef.current && !event.composedPath().includes(sortRef.current)) {
         setOpen(false);
       }
     };
